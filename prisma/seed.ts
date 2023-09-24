@@ -3,7 +3,7 @@ import { db } from "~/server/db";
 import { faker } from "@faker-js/faker";
 
 (async () => {
-  const NUMBER_OF_PROBLEMS = 100;
+  const NUMBER_OF_PROBLEMS = 50;
   const NUMBER_OF_TAGS = 10;
 
   const problems: Prisma.ProblemCreateInput[] = [];
@@ -20,7 +20,7 @@ import { faker } from "@faker-js/faker";
 
   for (let i = 0; i < NUMBER_OF_PROBLEMS; i++) {
     problems.push({
-      id: faker.string.uuid(),
+      id: faker.lorem.slug(),
       title: faker.lorem.sentence(),
       body: faker.lorem.paragraph(),
       difficulty: faker.number.float({ min: 1, max: 10, precision: 0.1 }),

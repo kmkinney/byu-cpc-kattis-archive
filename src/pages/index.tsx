@@ -1,4 +1,5 @@
 import Head from "next/head";
+import ProblemTable from "~/components/ProblemTable";
 
 import { api } from "~/utils/api";
 
@@ -16,15 +17,7 @@ export default function Home() {
       </Head>
       <main className="text-black">
         <h1>Problems</h1>
-        {data.map((problem) => (
-          <div key={problem.id}>
-            <h2>{problem.title}</h2>
-            <p>{problem.difficulty}</p>
-            {problem.tags.map((tag) => (
-              <span key={tag.id}>{tag.name}</span>
-            ))}
-          </div>
-        ))}
+        <ProblemTable data={data} />
       </main>
     </>
   );
