@@ -3,17 +3,9 @@ import {
   getCoreRowModel,
   useReactTable,
   flexRender,
-  FilterFn,
   getFilteredRowModel,
   getSortedRowModel,
-  SortingFn,
-  sortingFns,
 } from "@tanstack/react-table";
-import {
-  RankingInfo,
-  rankItem,
-  compareItems,
-} from "@tanstack/match-sorter-utils";
 
 import { RouterOutputs } from "~/utils/api";
 import {
