@@ -15,7 +15,7 @@ import { Input } from "~/components/ui/input";
 import { api } from "~/utils/api";
 
 const AddProblemSchema = z.object({
-  url: z.string(),
+  url: z.string().url(),
 });
 
 type AddProblemFormValues = z.infer<typeof AddProblemSchema>;
@@ -28,35 +28,38 @@ const AddProblemForm = () => {
     },
   });
 
-  const addProblem = api.problem.addByUrl.useMutation();
+  const { problem } = api.useContext();
+  const addProblem = api.problem.addByUrl.useMutation({
+    onSuccess: () => {
+      problem.allProblems.refetch();
+    },
+  });
 
   const onSubmit = (values: AddProblemFormValues) => {
     addProblem.mutate(values.url);
   };
   return (
-    <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
+    <Form {...form}>
+      <form onSubmit={form.handleSubmit(onSubmit)}>
+        <div className="flex pb-4">
+          <Button type="submit" className="mr-6 whitespace-nowrap">
+            Add Problem
+          </Button>
           <FormField
             control={form.control}
             name="url"
             render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor={field.name}>Problem Url</FormLabel>
+              <FormItem className="w-full">
                 <FormControl>
                   <Input placeholder="kattis problem url to add.." {...field} />
                 </FormControl>
-                <FormDescription>
-                  The url to the problem on kattis
-                </FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
-          <Button type="submit">Add Problem</Button>
-        </form>
-      </Form>
-    </>
+        </div>
+      </form>
+    </Form>
   );
 };
 
