@@ -12,6 +12,7 @@ import {
 } from "~/components/ui/form";
 import { Button } from "~/components/ui/button";
 import { Input } from "~/components/ui/input";
+import { api } from "~/utils/api";
 
 const AddProblemSchema = z.object({
   url: z.string(),
@@ -27,8 +28,10 @@ const AddProblemForm = () => {
     },
   });
 
+  const addProblem = api.problem.addByUrl.useMutation();
+
   const onSubmit = (values: AddProblemFormValues) => {
-    console.log(values);
+    addProblem.mutate(values.url);
   };
   return (
     <>

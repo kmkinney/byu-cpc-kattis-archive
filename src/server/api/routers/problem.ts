@@ -3,6 +3,7 @@ import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { fetchProblemHtml, parseProblem } from "../services/problemParser";
 
 const problemWithTags = Prisma.validator<Prisma.ProblemSelect>()({
   id: true,
@@ -41,4 +42,26 @@ export const problemRouter = createTRPCRouter({
       tags: problem.problemTags.map((problemTag) => problemTag.tag),
     };
   }),
+  addByUrl: publicProcedure
+    .input(z.string().url())
+    .mutation(async ({ input, ctx }) => {
+      const url = new URL(input);
+      const id = url.pathname.split("/").pop();
+      if (!id) {
+        throw new TRPCError({
+          code: "BAD_REQUEST",
+          message: `Invalid url ${input}`,
+        });
+      }
+      const html = await fetchProblemHtml(input);
+      const { difficulty, title, body } = await parseProblem(html);
+      return await ctx.db.problem.create({
+        data: {
+          id,
+          difficulty,
+          title,
+          body,
+        },
+      });
+    }),
 });
