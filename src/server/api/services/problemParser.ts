@@ -11,7 +11,7 @@ export async function fetchProblemHtml(url: string) {
   return html;
 }
 
-export async function parseProblem(html: string) {
+export function parseProblem(html: string) {
   const $ = load(html);
   const difficulty = $("#metadata-tab")
     .find("span:contains('Difficulty')")
