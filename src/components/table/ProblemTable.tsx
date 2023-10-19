@@ -5,9 +5,10 @@ import {
   flexRender,
   getFilteredRowModel,
   getSortedRowModel,
+  getPaginationRowModel,
 } from "@tanstack/react-table";
 
-import { RouterOutputs } from "~/utils/api";
+import { type RouterOutputs } from "~/utils/api";
 import {
   Table,
   TableBody,
@@ -19,8 +20,9 @@ import {
 import { useState } from "react";
 import { Input } from "../ui/input";
 import { fuzzyFilter } from "~/lib/utils";
-import { Button } from "../ui/button";
+// import { Button } from "../ui/button";
 import Tags from "./Tags";
+import { Button } from "../ui/button";
 
 type Problem = RouterOutputs["problem"]["allProblems"][number];
 
@@ -59,6 +61,7 @@ const ProblemTable = ({ data }: { data: Problem[] }) => {
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     onGlobalFilterChange: setGlobalFilter,
     globalFilterFn: fuzzyFilter,
     filterFns: {
@@ -126,6 +129,24 @@ const ProblemTable = ({ data }: { data: Problem[] }) => {
             )}
           </TableBody>
         </Table>
+      </div>
+      <div className="flex items-center justify-end space-x-2 py-4">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
+          Previous
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
+          Next
+        </Button>
       </div>
     </>
   );
