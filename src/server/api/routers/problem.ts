@@ -54,7 +54,7 @@ export const problemRouter = createTRPCRouter({
         });
       }
       const html = await fetchProblemHtml(input);
-      const { difficulty, title, body } = await parseProblem(html);
+      const { difficulty, title, body } = parseProblem(html);
       return await ctx.db.problem.create({
         data: {
           id,

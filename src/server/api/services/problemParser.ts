@@ -1,4 +1,16 @@
 import { load } from "cheerio";
+import { db } from "~/server/db";
+
+export async function addProblemInfoToDb(problemId: string) {
+  const url = `https://open.kattis.com/problems/${problemId}`;
+  const html = await fetchProblemHtml(url);
+  const problemData = parseProblem(html);
+  return await db.problem.upsert({
+    where: { id: problemId },
+    update: problemData,
+    create: { id: problemId, ...problemData },
+  });
+}
 
 export async function fetchProblemHtml(url: string) {
   const response = await fetch(url, {

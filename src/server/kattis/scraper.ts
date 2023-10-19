@@ -1,10 +1,12 @@
-import puppeteer from "puppeteer";
+import "dotenv/config";
+import ids from "./problemIds.json";
+import { addProblemInfoToDb } from "../api/services/problemParser";
 
 (async () => {
-  const URL = "https://open.kattis.com/problems?f_language=en";
-  const browser = await puppeteer.launch({ headless: false });
-  const page = await browser.newPage();
-  await page.setUserAgent(
-    "Kevin Kinney (kevin-kinney) - Kattis Scraper for School Club. Email: kevinmk712@gmail.com",
-  );
-})();
+  for (let i = 0; i < ids.length; i++) {
+    await addProblemInfoToDb(ids[i]!);
+    console.log(`Added problem ${i}/${ids.length} id: ${ids[i]}`);
+  }
+})()
+  .then(console.log)
+  .catch(console.error);
